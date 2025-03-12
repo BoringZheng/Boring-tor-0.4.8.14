@@ -636,12 +636,19 @@ conflux_decide_next_circ(conflux_t *cfx)
     return NULL;
   }
 
+  //Boring add a log message here
+  log_info(LD_GENERAL, "Conflux: Deciding next circuit, current leg: %p", cfx->curr_leg);
+
+
   switch (cfx->params.alg) {
     case CONFLUX_ALG_MINRTT: // latency (no ooq)
+      log_info(LD_GENERAL, "Conflux: minRTT picked circuit %u with RTT %lu us", circ->global_identifier, min_rtt);
       return (circuit_t*)conflux_decide_circ_minrtt(cfx);
     case CONFLUX_ALG_LOWRTT: // high throughput (high oooq)
+      log_info(LD_GENERAL, "Conflux: lowRTT picked circuit %u with RTT %lu us", circ->global_identifier, low_rtt);
       return (circuit_t*)conflux_decide_circ_lowrtt(cfx);
     case CONFLUX_ALG_CWNDRTT: // throughput (low oooq)
+      log_info(LD_GENERAL, "Conflux: cwndRTT picked circuit %u with RTT %lu us", leg->circ->global_identifier, min_rtt);
       return (circuit_t*)conflux_decide_circ_cwndrtt(cfx);
     default:
       return NULL;
