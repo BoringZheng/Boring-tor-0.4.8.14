@@ -260,7 +260,7 @@ conflux_decide_circ_minrtt(const conflux_t *cfx)
   }
 
   //Boring add a log message here
-  log_info(LD_GENERAL, "Conflux: minRTT picked circuit %u with RTT %lu us", circ->n_circ_id, min_rtt);
+  log_info(LD_CIRC, "Conflux: minRTT picked circuit %u with RTT %lu us", circ->n_circ_id, min_rtt);
   
   return circ;
 }
@@ -295,7 +295,7 @@ conflux_decide_circ_lowrtt(const conflux_t *cfx)
   } CONFLUX_FOR_EACH_LEG_END(leg);
 
   // Boring add a log message here
-  log_info(LD_GENERAL, "Conflux: lowRTT picked circuit %u with RTT %lu us", circ->n_circ_id, low_rtt);
+  log_info(LD_CIRC, "Conflux: lowRTT picked circuit %u with RTT %lu us", circ->n_circ_id, low_rtt);
 
   /* At this point, if we found a circuit, we've already validated that its
    * congestion window has room. */
@@ -425,6 +425,7 @@ conflux_decide_circ_cwndrtt(const conflux_t *cfx)
 
   leg = NULL;
 
+  
   CONFLUX_FOR_EACH_LEG_BEGIN(cfx, l) {
     if (!circuit_ready_to_send(l->circ)) {
       continue;
@@ -445,7 +446,7 @@ conflux_decide_circ_cwndrtt(const conflux_t *cfx)
   }
 
   //Boring add a log message here
-  log_info(LD_GENERAL, "Conflux: cwndRTT picked circuit %u with RTT %lu us", leg->circ->n_circ_id, min_rtt);
+  log_info(LD_CIRC, "Conflux: cwndRTT picked circuit %u with RTT %lu us", leg->circ->n_circ_id, min_rtt);
 
   return leg->circ;
 }
@@ -648,7 +649,7 @@ conflux_decide_next_circ(conflux_t *cfx)
   }
 
   //Boring add a log message here
-  log_info(LD_GENERAL, "Conflux: Deciding next circuit, current leg: %p", cfx->curr_leg);
+  log_info(LD_CIRC, "Conflux: Deciding next circuit, current leg: %p", cfx->curr_leg);
 
 
   switch (cfx->params.alg) {
