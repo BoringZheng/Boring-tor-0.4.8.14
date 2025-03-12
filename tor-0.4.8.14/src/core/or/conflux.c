@@ -258,6 +258,10 @@ conflux_decide_circ_minrtt(const conflux_t *cfx)
   if (!circ || !circuit_ready_to_send(circ)) {
     return NULL;
   }
+
+  //Boring add a log message here
+  log_info(LD_GENERAL, "Conflux: minRTT picked circuit %u with RTT %lu us", circ->n_circ_id, min_rtt);
+  
   return circ;
 }
 
@@ -289,6 +293,9 @@ conflux_decide_circ_lowrtt(const conflux_t *cfx)
       circ = leg->circ;
     }
   } CONFLUX_FOR_EACH_LEG_END(leg);
+
+  // Boring add a log message here
+  log_info(LD_GENERAL, "Conflux: lowRTT picked circuit %u with RTT %lu us", circ->n_circ_id, low_rtt);
 
   /* At this point, if we found a circuit, we've already validated that its
    * congestion window has room. */
@@ -436,6 +443,10 @@ conflux_decide_circ_cwndrtt(const conflux_t *cfx)
   if (!leg || !circuit_ready_to_send(leg->circ)) {
     return NULL;
   }
+
+  //Boring add a log message here
+  log_info(LD_GENERAL, "Conflux: cwndRTT picked circuit %u with RTT %lu us", leg->circ->n_circ_id, min_rtt);
+
   return leg->circ;
 }
 
@@ -642,13 +653,10 @@ conflux_decide_next_circ(conflux_t *cfx)
 
   switch (cfx->params.alg) {
     case CONFLUX_ALG_MINRTT: // latency (no ooq)
-      log_info(LD_GENERAL, "Conflux: minRTT picked circuit %u with RTT %lu us", circ->global_identifier, min_rtt);
       return (circuit_t*)conflux_decide_circ_minrtt(cfx);
     case CONFLUX_ALG_LOWRTT: // high throughput (high oooq)
-      log_info(LD_GENERAL, "Conflux: lowRTT picked circuit %u with RTT %lu us", circ->global_identifier, low_rtt);
       return (circuit_t*)conflux_decide_circ_lowrtt(cfx);
     case CONFLUX_ALG_CWNDRTT: // throughput (low oooq)
-      log_info(LD_GENERAL, "Conflux: cwndRTT picked circuit %u with RTT %lu us", leg->circ->global_identifier, min_rtt);
       return (circuit_t*)conflux_decide_circ_cwndrtt(cfx);
     default:
       return NULL;
@@ -916,3 +924,7 @@ conflux_dequeue_cell(conflux_t *cfx)
     return NULL;
   }
 }
+
+
+
+
